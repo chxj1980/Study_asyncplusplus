@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Async++", "src\Async++.vcxproj", "{CD7D9E87-2403-47CE-A756-6015B1AC7EF6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo1", "demo1\demo1.vcxproj", "{7E0A4CD3-56FF-438D-8847-860E3D76FB21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Tasks", "1.Tasks", "{A5A9E592-9CF1-4275-A1A5-97E8B8E8B3B9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "task1", "task1\task1.vcxproj", "{90634242-1A00-47D6-8C56-946540651131}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Parallel algorithms", "2.Parallel algorithms", "{DA4A8268-020F-46D2-8AA6-AF93E143610E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Parallel algorithms", "Parallel algorithms\Parallel algorithms.vcxproj", "{E64CF431-0F36-4D20-B36F-1777242F1DD3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Schedulers", "3.Schedulers", "{498C1CA0-C13A-4083-A9D8-72FD09330A74}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Schedulers", "Schedulers\Schedulers.vcxproj", "{6979BCC3-3CAB-490E-8601-43B9AFE5A685}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD7D9E87-2403-47CE-A756-6015B1AC7EF6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CD7D9E87-2403-47CE-A756-6015B1AC7EF6}.Debug|Win32.Build.0 = Debug|Win32
+		{CD7D9E87-2403-47CE-A756-6015B1AC7EF6}.Release|Win32.ActiveCfg = Release|Win32
+		{CD7D9E87-2403-47CE-A756-6015B1AC7EF6}.Release|Win32.Build.0 = Release|Win32
+		{7E0A4CD3-56FF-438D-8847-860E3D76FB21}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7E0A4CD3-56FF-438D-8847-860E3D76FB21}.Debug|Win32.Build.0 = Debug|Win32
+		{7E0A4CD3-56FF-438D-8847-860E3D76FB21}.Release|Win32.ActiveCfg = Release|Win32
+		{7E0A4CD3-56FF-438D-8847-860E3D76FB21}.Release|Win32.Build.0 = Release|Win32
+		{90634242-1A00-47D6-8C56-946540651131}.Debug|Win32.ActiveCfg = Debug|Win32
+		{90634242-1A00-47D6-8C56-946540651131}.Debug|Win32.Build.0 = Debug|Win32
+		{90634242-1A00-47D6-8C56-946540651131}.Release|Win32.ActiveCfg = Release|Win32
+		{90634242-1A00-47D6-8C56-946540651131}.Release|Win32.Build.0 = Release|Win32
+		{E64CF431-0F36-4D20-B36F-1777242F1DD3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E64CF431-0F36-4D20-B36F-1777242F1DD3}.Debug|Win32.Build.0 = Debug|Win32
+		{E64CF431-0F36-4D20-B36F-1777242F1DD3}.Release|Win32.ActiveCfg = Release|Win32
+		{E64CF431-0F36-4D20-B36F-1777242F1DD3}.Release|Win32.Build.0 = Release|Win32
+		{6979BCC3-3CAB-490E-8601-43B9AFE5A685}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6979BCC3-3CAB-490E-8601-43B9AFE5A685}.Debug|Win32.Build.0 = Debug|Win32
+		{6979BCC3-3CAB-490E-8601-43B9AFE5A685}.Release|Win32.ActiveCfg = Release|Win32
+		{6979BCC3-3CAB-490E-8601-43B9AFE5A685}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{90634242-1A00-47D6-8C56-946540651131} = {A5A9E592-9CF1-4275-A1A5-97E8B8E8B3B9}
+		{E64CF431-0F36-4D20-B36F-1777242F1DD3} = {DA4A8268-020F-46D2-8AA6-AF93E143610E}
+		{6979BCC3-3CAB-490E-8601-43B9AFE5A685} = {498C1CA0-C13A-4083-A9D8-72FD09330A74}
+	EndGlobalSection
+EndGlobal

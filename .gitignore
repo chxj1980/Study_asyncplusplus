@@ -11,3 +11,24 @@
 *.lai
 *.la
 *.a
+
+# VS tmp files
+*.log
+*.tlog
+*.db
+*.idb
+*.obj
+*.ilk
+*.exp
+*.pdb
+*.user
+*.ipch
+*.suo
+*.sdf
+*.opensdf
+
+debug/
+Debug/
+release/
+Release/
+obj/
