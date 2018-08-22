@@ -1,148 +1,52 @@
-# Copyright (c) 2015 Amanieu d'Antras
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
+cmake_minimum_required (VERSION 2.6)
 
-cmake_minimum_required(VERSION 3.1)
-project(Async++ C CXX)
+INCLUDE_DIRECTORIES(../../thirdparty/comm)
 
-option(BUILD_SHARED_LIBS "Build Async++ as a shared library" ON)
-option(USE_CXX_EXCEPTIONS "Enable C++ exception support" ON)
-if (APPLE)
-	option(BUILD_FRAMEWORK "Build a Mac OS X framework instead of a library" OFF)
-	if (BUILD_FRAMEWORK AND NOT BUILD_SHARED_LIBS)
-		message(FATAL_ERROR "Can't build a framework with static libraries")
-	endif()
-endif()
+FIND_LIBRARY(COMM_LIB comm ../../thirdparty/comm/lib NO_DEFAULT_PATH)
+FIND_LIBRARY(RUNTIME_LIB rt /usr/lib  /usr/local/lib NO_DEFAULT_PATH)
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+link_libraries(${COMM_LIB} ${RUNTIME_LIB})
 
-# Add all source and header files so IDEs can see them
-set(ASYNCXX_INCLUDE
-	${PROJECT_SOURCE_DIR}/include/async++/aligned_alloc.h
-	${PROJECT_SOURCE_DIR}/include/async++/cancel.h
-	${PROJECT_SOURCE_DIR}/include/async++/continuation_vector.h
-	${PROJECT_SOURCE_DIR}/include/async++/parallel_for.h
-	${PROJECT_SOURCE_DIR}/include/async++/parallel_invoke.h
-	${PROJECT_SOURCE_DIR}/include/async++/parallel_reduce.h
-	${PROJECT_SOURCE_DIR}/include/async++/partitioner.h
-	${PROJECT_SOURCE_DIR}/include/async++/range.h
-	${PROJECT_SOURCE_DIR}/include/async++/ref_count.h
-	${PROJECT_SOURCE_DIR}/include/async++/scheduler.h
-	${PROJECT_SOURCE_DIR}/include/async++/scheduler_fwd.h
-	${PROJECT_SOURCE_DIR}/include/async++/task.h
-	${PROJECT_SOURCE_DIR}/include/async++/task_base.h
-	${PROJECT_SOURCE_DIR}/include/async++/traits.h
-	${PROJECT_SOURCE_DIR}/include/async++/when_all_any.h
-)
-set(ASYNCXX_SRC
-	${PROJECT_SOURCE_DIR}/src/internal.h
-	${PROJECT_SOURCE_DIR}/src/fifo_queue.h
-	${PROJECT_SOURCE_DIR}/src/scheduler.cpp
-	${PROJECT_SOURCE_DIR}/src/singleton.h
-	${PROJECT_SOURCE_DIR}/src/task_wait_event.h
-	${PROJECT_SOURCE_DIR}/src/threadpool_scheduler.cpp
-	${PROJECT_SOURCE_DIR}/src/work_steal_queue.h
-)
-source_group(include FILES ${PROJECT_SOURCE_DIR}/include/async++.h ${ASYNCXX_INCLUDE})
-source_group(src FILES ${ASYNCXX_SRC})
-add_library(Async++ ${PROJECT_SOURCE_DIR}/include/async++.h ${ASYNCXX_INCLUDE} ${ASYNCXX_SRC})
-
-# Async++ only depends on the C++11 standard libraries, but some implementations
-# require the -pthread compiler flag to enable threading functionality.
-if (NOT MSVC)
-	target_compile_options(Async++ PRIVATE -std=c++11)
-endif()
-if (APPLE)
-	# Use libc++ on Mac because the shipped libstdc++ version is ancient
-	target_compile_options(Async++ PRIVATE -stdlib=libc++)
-	set_target_properties(Async++ PROPERTIES LINK_FLAGS -stdlib=libc++)
-endif()
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
-target_link_libraries(Async++ PUBLIC Threads::Threads)
-
-# Set up preprocessor definitions
-target_include_directories(Async++ PRIVATE ${PROJECT_SOURCE_DIR}/include)
-set_target_properties(Async++ PROPERTIES DEFINE_SYMBOL LIBASYNC_BUILD)
-if (BUILD_SHARED_LIBS)
-	# Minimize the set of symbols exported by libraries
-	set_target_properties(Async++ PROPERTIES CXX_VISIBILITY_PRESET hidden VISIBILITY_INLINES_HIDDEN ON)
-else()
-	target_compile_definitions(Async++ PUBLIC LIBASYNC_STATIC)
-endif()
-
-# Enable warnings for strict C++ standard conformance
-if (NOT MSVC)
-	target_compile_options(Async++ PRIVATE -Wall -Wextra -pedantic)
-endif()
-
-# Async++ doesn't make use of RTTI information, so don't generate it
-if (MSVC)
-	target_compile_options(Async++ PRIVATE /GR-)
-else()
-	target_compile_options(Async++ PRIVATE -fno-rtti)
-endif()
-
-# Allow disabling exceptions, but warn the user about the consequences
-if (NOT USE_CXX_EXCEPTIONS)
-	message(WARNING "Exceptions have been disabled. Any operation that would "
-	        "throw an exception will result in a call to std::abort() instead.")
-	target_compile_definitions(Async++ PUBLIC LIBASYNC_NO_EXCEPTIONS)
-	if (MSVC)
-		target_compile_options(Async++ PUBLIC /EHs-c-)
-	else()
-		target_compile_options(Async++ PUBLIC -fno-exceptions)
-	endif()
-endif()
-
-include(CMakePackageConfigHelpers)
-configure_package_config_file("${CMAKE_CURRENT_LIST_DIR}/Async++Config.cmake.in"
-	"${PROJECT_BINARY_DIR}/Async++Config.cmake"
-	INSTALL_DESTINATION cmake
+ADD_DEFINITIONS(
+-O3 -g -W -Wall
+ -Wunused-variable -Wunused-parameter -Wunused-function -Wunused
+ -Wno-deprecated -Woverloaded-virtual -Wwrite-strings
+ -D__WUR= -D_REENTRANT -D_FILE_OFFSET_BITS=64 -DTIXML_USE_STL
 )
 
-install(FILES "${PROJECT_BINARY_DIR}/Async++Config.cmake"
-	DESTINATION cmake
+
+add_library(lib_demo
+        cmd.cpp
+        global.cpp
+        md5.cpp
 )
 
-# Install the library and produce a CMake export script
-install(TARGETS Async++
-	EXPORT Async++
-	RUNTIME DESTINATION bin
-	LIBRARY DESTINATION lib
-	ARCHIVE DESTINATION lib
-	FRAMEWORK DESTINATION Frameworks
+link_libraries(lib_demo)
+add_executable(demo
+        main.cpp
 )
-export(EXPORT Async++)
-install(EXPORT Async++ DESTINATION cmake)
-if (APPLE AND BUILD_FRAMEWORK)
-	set_target_properties(Async++ PROPERTIES OUTPUT_NAME Async++ FRAMEWORK ON)
-	set_source_files_properties(${ASYNCXX_INCLUDE} PROPERTIES MACOSX_PACKAGE_LOCATION Headers/async++)
-	set_source_files_properties(${PROJECT_SOURCE_DIR}/include/async++.h PROPERTIES MACOSX_PACKAGE_LOCATION Headers)
-else()
-	set_target_properties(Async++ PROPERTIES OUTPUT_NAME async++)
-	target_include_directories(Async++ INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>)
-	install(FILES ${PROJECT_SOURCE_DIR}/include/async++.h DESTINATION include)
-	install(FILES ${ASYNCXX_INCLUDE} DESTINATION include/async++)
+LINK_DIRECTORIES(${XX1_LIB_PATH} ${XX2_LIB_PATH})
+
+# link library in static mode
+target_link_libraries(demo libuuid.a)
+
+
+target_link_libraries(${PROJECT_NAME}
+  ws2_32.lib
+  psapi.lib
+  iphlpapi.lib
+  debug  ${CMAKE_CURRENT_LIST_DIR}/../../libuv/Debug/lib/libuv.lib
+  optimized   ${CMAKE_CURRENT_LIST_DIR}/../../libuv/Release/lib/libuv.lib
+)
+
+
+# 添加依赖库
+find_library(LIB_I_NEED boost_regex-vc120-mt-gd-1_55 C:/boost_1_55_0/lib32-msvc-12.0)
+if(${LIB_I_NEED} STREQUAL "LIB_I_NEED-NOTFOUND")
+    message(FATAL_ERROR "Couldn't find the 'external_lib' library")
 endif()
 
-SET(CPACK_GENERATOR "DEB")
-SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "none") #required
+message(STATUS "Found 'external_lib' at: ${LIB_I_NEED}")
 
-INCLUDE(CPack)
+# ${PROJECT_NAME} 不能省略
+target_link_libraries (${PROJECT_NAME} ${LIB_I_NEED})

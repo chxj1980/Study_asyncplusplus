@@ -68,7 +68,7 @@ void example2()
 {
 	// Set wait handler on GTK thread to disallow waiting for tasks
 	async::set_thread_wait_handler(ui_wait_handler);
-
+	
 
 }
 
@@ -79,5 +79,6 @@ int main()
 		std::cout << "OK" << std::endl;
 	});
 	auto t2 = async::make_task(42);
+	example2();
 	return 0;
 }
